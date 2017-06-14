@@ -6,16 +6,17 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.*;
+import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
 
 /**
  *
  */
 @Order(value = 1)
-
-public class WebAppInitializer implements WebApplicationInitializer {
+public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer implements WebApplicationInitializer {
 
 	private static final String DISPATCHER_SERVLET_NAME = "spring-mvc";
 	private static final String DISPATCHER_SERVLET_MAPPING = "/rest/*";
@@ -41,5 +42,34 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		springMvc.addMapping(DISPATCHER_SERVLET_MAPPING);
 
 		servletContext.addListener(new ContextLoaderListener(appContext));
+	}
+
+	@Override
+	protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+		registration.setInitParameter("dispatchOptionsRequest", "true");
+		registration.setAsyncSupported(true);
+	}
+
+
+	@Override
+	protected Class<?>[] getRootConfigClasses() {
+		return new Class<?>[0];
+	}
+
+	@Override
+	protected Class<?>[] getServletConfigClasses() {
+		return new Class<?>[0];
+	}
+
+	@Override
+	protected String[] getServletMappings() {
+		return new String[] { "/" };
+	}
+
+	@Override
+	protected Filter[] getServletFilters() {
+		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+		characterEncodingFilter.setEncoding(StandardCharsets.UTF_8.name());
+		return new Filter[] { characterEncodingFilter };
 	}
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700" rel="stylesheet" type="text/css" />
-    <link href="css/main.css" rel="stylesheet" type="text/css" />
+    <link href="assets/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body ng-app="chatApp">
 <div ng-controller="ChatCtrl" class="container">
@@ -20,12 +20,12 @@
     </p>
 </div>
 
-<script src="bower_components/angular/angular.min.js" type="text/javascript"></script>
-<script src="bower_components/stomp-websocket/lib/stomp.min.js" type="text/javascript"></script>
-<script src="bower_components/sockjs/sockjs.js"></script>
-<script src="bower_components/lodash/dist/lodash.min.js"></script>
+<script src="libs/sockjs/sockjs.min.js" type="text/javascript"></script>
+<script src="libs/stomp-websocket/lib/stomp.min.js" type="text/javascript"></script>
+<script src="libs/angular/angular.min.js"></script>
+<script src="libs/lodash/dist/lodash.min.js"></script>
 <script src="app/app.js" type="text/javascript"></script>
-<script src="app/controller.js" type="text/javascript"></script>
+<script src="app/controllers.js" type="text/javascript"></script>
 <script src="app/services.js" type="text/javascript"></script>
 </body>
 </html>
