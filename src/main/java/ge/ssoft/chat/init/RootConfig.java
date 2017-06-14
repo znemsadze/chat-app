@@ -12,10 +12,10 @@ import org.springframework.stereotype.Controller;
  */
 @Configuration
 @ComponentScan(basePackages = {"ge"}
-//,excludeFilters = {
-//        @ComponentScan.Filter(value = Controller.class, type = FilterType.ANNOTATION),
-//        @ComponentScan.Filter(value = Configuration.class, type = FilterType.ANNOTATION)
-//}
+,excludeFilters = {
+        @ComponentScan.Filter(value = Controller.class, type = FilterType.ANNOTATION),
+        @ComponentScan.Filter(value = Configuration.class, type = FilterType.ANNOTATION)
+}
 )
 public class RootConfig {
 
