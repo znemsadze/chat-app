@@ -1,6 +1,7 @@
 package ge.ssoft.chat.init;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -25,15 +26,15 @@ import static ge.ssoft.chat.init.ApplicationConfig.*;
  */
 @Configuration
 @EnableWebMvc
-@EnableTransactionManagement
+@ComponentScan(basePackages = "ge.ssoft.chat.mvc")
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 
 
-    @Bean
-    public StringHttpMessageConverter stringHttpMessageConverter() {
-        return new StringHttpMessageConverter(Charset.forName("UTF-8"));
-    }
+//    @Bean
+//    public StringHttpMessageConverter stringHttpMessageConverter() {
+//        return new StringHttpMessageConverter(Charset.forName("UTF-8"));
+//    }
 
 
     @Bean
@@ -73,15 +74,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         interceptor.setUseExpiresHeader(true);
         interceptor.setUseCacheControlHeader(true);
         interceptor.setUseCacheControlNoStore(true);
-
         return interceptor;
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/libs/**").addResourceLocations("/libs/");
+        registry.addResourceHandler("/bower_components/**").addResourceLocations("/bower_components/");
         registry.addResourceHandler("/app/**").addResourceLocations("/app/");
-        registry.addResourceHandler("/assets/**").addResourceLocations("/assets/");
+        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
     }
 
     @Override

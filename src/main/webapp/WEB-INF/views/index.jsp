@@ -19,6 +19,7 @@
         <span ng-class="{self: message.self}">{{message.message}}</span>
     </p>
 </div>
+<H1>fddjfljdfldfjldj</H1>
 
 <script src="libs/sockjs/sockjs.min.js" type="text/javascript"></script>
 <script src="libs/stomp-websocket/lib/stomp.min.js" type="text/javascript"></script>
