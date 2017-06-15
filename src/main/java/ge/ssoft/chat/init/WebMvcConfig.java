@@ -31,10 +31,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 
 
-//    @Bean
-//    public StringHttpMessageConverter stringHttpMessageConverter() {
-//        return new StringHttpMessageConverter(Charset.forName("UTF-8"));
-//    }
+    @Bean
+    public StringHttpMessageConverter stringHttpMessageConverter() {
+        return new StringHttpMessageConverter(Charset.forName("UTF-8"));
+    }
 
 
     @Bean
