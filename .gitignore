@@ -1,5 +1,6 @@
 /.idea
 /target
-/out
-toy-manager.iml
+/src/main/resources/META_INF
+/src/main/resources/application.properties
+
 

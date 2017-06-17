@@ -21,7 +21,11 @@ angular.module("chatApp.services").service("ChatService", function($q, $timeout)
         }, JSON.stringify({
             message: message,
             id: id
-        }));
+        }),
+            JSON.stringify({
+                'key': 'csrfToken',
+                'value': '${csrfToken}'
+            }));
         messageIds.push(id);
     };
 

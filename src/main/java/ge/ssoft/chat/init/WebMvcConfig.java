@@ -62,6 +62,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 
 
+
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
@@ -89,4 +90,45 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(webContentInterceptor());
     }
 
+    @SuppressWarnings("ConstantConditions")
+    @Bean
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(getConfig("spring.datasource.driver-class-name"));
+        dataSource.setUrl(getConfig("spring.datasource.url"));
+        dataSource.setUsername(getConfig("spring.datasource.username"));
+        dataSource.setPassword(getConfig("spring.datasource.password"));
+        return dataSource;
+    }
+
+
+    @SuppressWarnings("ConstantConditions")
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource());
+		em.setPackagesToScan("ge.ssoft.chat.core.model");
+        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter() {
+            {
+                this.setDatabasePlatform(getConfig("spring.jpa.database-platform"));
+                String showSql = getConfig("spring.jpa.show-sql");
+                if (showSql != null) {
+                    this.setShowSql(showSql.equals("true"));
+                }
+            }
+        });
+        Properties entityManagerProperties = new Properties();
+        entityManagerProperties.put("hibernate.temp.use_jdbc_metadata_defaults", getConfig("hibernate.temp.use_jdbc_metadata_defaults"));
+        entityManagerProperties.put("hibernate.show_sql",getConfig("spring.jpa.show-sql"));
+        entityManagerProperties.put("hibernate.format_sql", getConfig("hibernate.format_sql"));
+        em.setJpaProperties(entityManagerProperties);
+        return em;
+    }
+
+    @Bean
+    public JpaTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        return transactionManager;
+    }
 }
