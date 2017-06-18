@@ -22,11 +22,7 @@ chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
                 message: message,
                 id: id,
                 xAuthToken:$cookies.get('X-AUTH-TOKEN')
-            }),
-            JSON.stringify({
-                'key': 'csrfToken',
-                'value': '${csrfToken}'
-            }));
+            }) );
         messageIds.push(id);
     };
 
@@ -58,6 +54,7 @@ chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
     var initialize = function () {
         socket.client = new SockJS(service.SOCKET_URL);
         socket.stomp = Stomp.over(socket.client);
+        // socket.stomp.debug=null;
         socket.stomp.connect({}, startListener);
         socket.stomp.onclose = reconnect;
     };

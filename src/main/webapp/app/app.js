@@ -29,23 +29,3 @@ chatApp.config(function ($routeProvider) {
             controller: 'mainController'
         });
 });
-chatApp.controller('logoutController', function ($scope, $location, UsersService) {
-    $scope.isAdmin=false;
-    console.log("4545");
-    UsersService.logout($scope);
-});
-
-chatApp.controller('mainController', function ($scope,$rootScope,$modal,$log, $location, UsersService) {
-    UsersService.isAuthorized($scope)
-    $scope.username = "";
-    $scope.password = "";
-    $scope.isAdmin=false;
-    $scope.isUser=false;
-    $rootScope.viewer = null;
-    $rootScope.tmpImages = [];
-    $scope.login = function () {
-        UsersService.login($scope,UsersService.isAuthorized);
-    }
-});
-
-

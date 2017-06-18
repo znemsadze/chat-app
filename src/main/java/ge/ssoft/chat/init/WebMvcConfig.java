@@ -26,7 +26,7 @@ import static ge.ssoft.chat.init.ApplicationConfig.*;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "ge.ssoft.chat.mvc")
+@ComponentScan(basePackages = "ge")
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 

@@ -1,0 +1,18 @@
+<div class="container"  >
+    <div class="form-signin-heading" style="text-align: center;"> <img style="width: 200px; height: 200px;" src="images/messages.png"  >
+        <form class="form-signin">
+            <h4 class="form-signin-heading">გთხოვთ გაიაროთ ავტორიზაცია</h4>
+            <label for="inputEmail" class="sr-only">მომხმარებლის სახელი</label>
+            <input type="text" id="inputEmail" ng-model="username" class="form-control" placeholder="მომხმარებლის სახელი" required autofocus>
+            <label for="inputPassword" class="sr-only">პაროლი</label>
+            <input type="password" ng-model="password" id="inputPassword" class="form-control" placeholder="პაროლი" required>
+
+            <div  >
+                <label style="color: crimson ;font-size: 12px;">
+                    {{errorMessage}}
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" ng-click="login()" type="submit">შესვლა</button>
+        </form>
+    </div>
+</div>

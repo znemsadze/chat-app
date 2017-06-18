@@ -1,9 +1,4 @@
-package ge.ssoft.chat.mvc;
-
-
-import ge.ssoft.chat.authentification.TokenAuthenticationService;
-import ge.ssoft.chat.authentification.UserAuthentication;
-import ge.ssoft.chat.authentification.UserRole;
+package ge.ssoft.chat.authentification;
 import ge.ssoft.chat.core.model.Roles;
 import ge.ssoft.chat.core.model.UserAuthority;
 import ge.ssoft.chat.core.model.Users;
