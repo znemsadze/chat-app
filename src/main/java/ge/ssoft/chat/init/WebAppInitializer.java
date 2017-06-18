@@ -1,5 +1,6 @@
 package ge.ssoft.chat.init;
 
+import ge.ssoft.chat.authentification.StatelessAuthenticationSecurityConfig;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -46,23 +47,20 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
 	@Override
 	protected void customizeRegistration(ServletRegistration.Dynamic registration) {
-
 		CharacterEncodingFilter encoder = new CharacterEncodingFilter();
 		encoder.setEncoding("UTF-8");
 		encoder.setForceEncoding(true);
 		EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD);
-
-
 		registration.setInitParameter("dispatchOptionsRequest", "true");
-
-
 		registration.setAsyncSupported(true);
 	}
 
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class< ?>[] { RootConfig.class, WebSocketConfig.class ,WebMvcConfig.class};
+		return new Class< ?>[] { RootConfig.class, WebSocketConfig.class ,
+				StatelessAuthenticationSecurityConfig.class,
+				WebMvcConfig.class};
 	}
 
 	@Override

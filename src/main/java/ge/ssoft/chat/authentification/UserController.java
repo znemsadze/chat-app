@@ -1,6 +1,9 @@
-package ge.ssoft.chat.authentification;
+package ge.ssoft.chat.mvc;
 
 
+import ge.ssoft.chat.authentification.TokenAuthenticationService;
+import ge.ssoft.chat.authentification.UserAuthentication;
+import ge.ssoft.chat.authentification.UserRole;
 import ge.ssoft.chat.core.model.Roles;
 import ge.ssoft.chat.core.model.UserAuthority;
 import ge.ssoft.chat.core.model.Users;
@@ -21,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "rest")
 public class UserController {
 
     @Autowired
@@ -31,7 +35,7 @@ public class UserController {
 
 
 
-    @RequestMapping(value = "/api/users/current", method = RequestMethod.GET)
+    @RequestMapping(value = "api/users/current", method = RequestMethod.GET)
     public Users getCurrent() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -42,7 +46,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/api/logout", method = RequestMethod.POST)
+    @RequestMapping(value = "api/logout", method = RequestMethod.POST)
     public Users logOut(HttpServletRequest request, HttpServletResponse response) {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Cookie[] cookies = request.getCookies();
@@ -77,13 +81,13 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/admin/api/users/byid/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "admin/api/users/byid/{userId}", method = RequestMethod.GET)
     public Users getUserbyId(@PathVariable String userId) {
         return userRepository.findOne(Integer.parseInt(userId));
     }
 
 
-    @RequestMapping(value = "/api/users/current", method = RequestMethod.PATCH)
+    @RequestMapping(value = "api/users/current", method = RequestMethod.PATCH)
     public ResponseEntity<String> changePassword(@RequestBody final Users user) {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         final Users currentUser = userRepository.findByUsername(authentication.getName());
@@ -102,7 +106,7 @@ public class UserController {
         return new ResponseEntity<String>("password changed", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/api/users/{user}/grant/role/{role}", method = RequestMethod.POST)
+    @RequestMapping(value = "admin/api/users/{user}/grant/role/{role}", method = RequestMethod.POST)
     public ResponseEntity<String> grantRole(@PathVariable Users user, @PathVariable UserRole role) {
         if (user == null) {
             return new ResponseEntity<String>("invalid user id", HttpStatus.UNPROCESSABLE_ENTITY);
@@ -113,7 +117,7 @@ public class UserController {
         return new ResponseEntity<String>("role granted", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/api/users/{user}/revoke/role/{role}", method = RequestMethod.POST)
+    @RequestMapping(value = "admin/api/users/{user}/revoke/role/{role}", method = RequestMethod.POST)
     public ResponseEntity<String> revokeRole(@PathVariable Users user, @PathVariable UserRole role) {
         if (user == null) {
             return new ResponseEntity<String>("invalid user id", HttpStatus.UNPROCESSABLE_ENTITY);
@@ -124,7 +128,7 @@ public class UserController {
         return new ResponseEntity<String>("role revoked", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/api/users", method = RequestMethod.GET)
+    @RequestMapping(value = "admin/api/users", method = RequestMethod.GET)
     public List<Users> list() {
         return userRepository.findAll();
     }
@@ -132,7 +136,7 @@ public class UserController {
 
 
 
-    @RequestMapping(value = "/admin/api/users/byid", method = RequestMethod.POST)
+    @RequestMapping(value = "admin/api/users/byid", method = RequestMethod.POST)
     public Users saveUser(@RequestBody Users user) {
         if (user.getUserId() != null) {
             Users currentUser = userRepository.findOne(user.getUserId());

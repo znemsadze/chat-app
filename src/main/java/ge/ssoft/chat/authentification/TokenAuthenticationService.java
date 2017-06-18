@@ -10,6 +10,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
+import static ge.ssoft.chat.init.ApplicationConfig.*;
 
 @Service
 public class TokenAuthenticationService {
@@ -21,6 +22,7 @@ public class TokenAuthenticationService {
 
     @Autowired
     public TokenAuthenticationService(@Value("${token.secret}") String secret) {
+        secret=  getConfig("token.secret");
         tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(secret));
     }
 
