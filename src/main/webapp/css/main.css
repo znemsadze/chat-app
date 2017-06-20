@@ -75,7 +75,7 @@ button:disabled {
 }
 
 .message time {
-    width: 80px;
+    width: 120px;
     color: #999;
     display: block;
     float: left;
@@ -90,7 +90,7 @@ button:disabled {
 }
 
 .message span {
-    width: calc(100% - 80px);
+    width: calc(100% - 120px);
     display: block;
     float: left;
     padding-left: 20px;
