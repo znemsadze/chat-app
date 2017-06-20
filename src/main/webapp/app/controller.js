@@ -15,6 +15,7 @@ chatApp.controller('logoutController', function ($scope, $location, UsersService
     $scope.isAdmin=false;
     console.log("4545");
     UsersService.logout($scope);
+
 });
 
 chatApp.controller('mainController', function ($scope,$rootScope,$modal,$log, $location, UsersService) {
@@ -28,12 +29,37 @@ chatApp.controller('mainController', function ($scope,$rootScope,$modal,$log, $l
     $scope.login = function () {
         UsersService.login($scope,UsersService.isAuthorized);
     }
+
+    $scope.registrate=function(){
+        $location.path("registrate");
+    }
+
+    $scope.startLoding = function () {
+        $scope.modalInstance = $modal.open({
+            templateUrl: 'LoadingModal.html',
+            backdrop: 'static',
+            keyboard: false,
+            windowClass: 'center-modal'
+
+        });
+    };
+
+    $scope.stopLoading = function () {
+        $scope.modalInstance.close();
+    }
 });
 
 
 
 
-chatApp.controller("Registrate", function($scope, UsersService) {
+chatApp.controller("RegistrateController", function($scope, UsersService,$location) {
      $scope.profile={};
+     $scope.registrateProfile=function(){
+         $scope.startLoading();
+         UsersService.saveUser($scope);
+     }
+    $scope.login=function(){
+        $location.path("login");
+    }
 
 });

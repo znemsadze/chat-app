@@ -162,7 +162,7 @@ chatApp.service("UsersService", function ($http, $location) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            data: JSON.stringify($scope.edtUser)
+            data: JSON.stringify($scope.profile)
         };
         $http(req).then(function (data) {
             $scope.edtUser = data.data;
