@@ -22,7 +22,6 @@ import static ge.ssoft.chat.init.ApplicationConfig.getConfig;
  * Created by zviad on 6/14/17.
  */
 @Controller
-@RequestMapping("/")
 public class ChatController {
 
     TokenHandler tokenHandler;
@@ -33,10 +32,6 @@ public class ChatController {
         tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(secret));
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String viewApplication() {
-        return "index";
-    }
 
     @MessageMapping("/chat")
     @SendTo("/topic/message")

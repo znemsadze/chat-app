@@ -6,7 +6,7 @@ chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
     }, messageIds = [];
 
     service.RECONNECT_TIMEOUT = 30000;
-    service.SOCKET_URL = "/chat-app/chat";
+    service.SOCKET_URL = "/chat";
     service.CHAT_TOPIC = "/topic/message";
     service.CHAT_BROKER = "/app/chat";
 
