@@ -4,12 +4,14 @@ import ge.ssoft.chat.core.model.GenerateImages;
 import ge.ssoft.chat.core.repositories.GenerateImagesRepo;
 import ge.ssoft.chat.exceptions.ReferencedObjectExists;
 import ge.ssoft.chat.exceptions.SendConflictException;
+import ge.ssoft.chat.resources.SimpleTextObj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
@@ -115,11 +117,11 @@ public class GenerateImmageController {
     }
 
 
-    @RequestMapping( value = "filename")
-    public String getUId(){
+    @RequestMapping( value = "filename",method = RequestMethod.GET )
+    public SimpleTextObj getUId( ){
         UUID uuid = UUID.randomUUID();
         String randomUUIDString = uuid.toString();
-        return randomUUIDString;
+        return new SimpleTextObj(randomUUIDString);
     }
 
 
