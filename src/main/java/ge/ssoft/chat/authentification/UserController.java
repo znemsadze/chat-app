@@ -1,9 +1,12 @@
 package ge.ssoft.chat.authentification;
+import ge.ssoft.chat.core.model.GenerateImages;
 import ge.ssoft.chat.core.model.Roles;
 import ge.ssoft.chat.core.model.UserAuthority;
 import ge.ssoft.chat.core.model.Users;
+import ge.ssoft.chat.core.repositories.GenerateImagesRepo;
 import ge.ssoft.chat.core.repositories.RolesRepo;
 import ge.ssoft.chat.core.repositories.UserRepository;
+import ge.ssoft.chat.exceptions.SendConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +31,9 @@ public class UserController {
     @Autowired
     RolesRepo rolesRepo;
 
+
+    @Autowired
+    GenerateImagesRepo generateImagesRepo;
 
 
     @RequestMapping(value = "api/users/current", method = RequestMethod.GET)
@@ -133,6 +139,16 @@ public class UserController {
 
     @RequestMapping(value = "admin/api/users/byid", method = RequestMethod.POST)
     public Users saveUser(@RequestBody Users user) {
+        if(user.getCaptchaName()==null||user.getCaptchaValue()==null){
+            throw new SendConflictException("invalid captcha");
+        }else{
+            GenerateImages  generateImages=generateImagesRepo.findOne(user.getCaptchaName());
+            if(generateImages==null|| !user.getCaptchaValue().equals( generateImages.getImageText())){
+                throw new  SendConflictException("invalid captcha");
+            }else{
+                generateImagesRepo.delete(generateImages);
+            }
+        }
         if (user.getUserId() != null) {
             Users currentUser = userRepository.findOne(user.getUserId());
             currentUser.setFirstName(user.getFirstName());
@@ -148,7 +164,6 @@ public class UserController {
                 userAuthority.setAuthority(roles.getCode());
                 currentUser.getAuthorities().add(userAuthority);
             }
-
             if (user.getPassword() == null) {
 
             } else {
@@ -182,6 +197,7 @@ public class UserController {
             return user;
         }
     }
+
 
 
 }

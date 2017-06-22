@@ -21,6 +21,16 @@
                        value="">
             </div>
 
+            <div class="form-group">
+
+                <label for="username">სახელი</label>
+                <input type="text" class="form-control" id="name" ng-model="profile.captchaValue"
+                       placeholder="შეიყვანეთ სახელი"
+                       value="">
+                <img src="files/captcha/"{{profile.captchaname}}>
+                <div><i class="fa fa-refresh"></i></div>
+            </div>
+
         </form>
         <button type="submit" ng-click="registerProfile()" class="btn btn-default " ng-disabled="actionDisabled"><i
                 ng-class="saveButtonClass"></i>რეგისტრაცია

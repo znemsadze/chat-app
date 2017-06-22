@@ -63,6 +63,12 @@ public class Users implements UserDetails {
     @Transient
     private Boolean admin;
 
+    @Transient
+    private String captchaName;
+
+    @Transient
+    private String captchaValue;
+
 
     public Long[] getRoleIds() {
         return roleIds;
@@ -296,5 +302,21 @@ public class Users implements UserDetails {
 
     public void setAdmin(Boolean admin) {
         this.admin = admin;
+    }
+
+    public String getCaptchaName() {
+        return captchaName;
+    }
+
+    public void setCaptchaName(String captchaName) {
+        this.captchaName = captchaName;
+    }
+
+    public String getCaptchaValue() {
+        return captchaValue;
+    }
+
+    public void setCaptchaValue(String captchaValue) {
+        this.captchaValue = captchaValue;
     }
 }

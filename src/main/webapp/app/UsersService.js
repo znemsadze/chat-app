@@ -173,4 +173,22 @@ chatApp.service("UsersService", function ($http, $location) {
         });
     }
 
+    this.loadCaptchaName=function($scope){
+        var req={
+            method: 'GET',
+            url: 'rest/files/filename' ,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        $http(req).then(function (data) {
+            $scope.profile.captchaName = data.data;
+            console.log($scope.edtUser);
+        }, function (data) {
+
+        }).finally(function () {
+
+        });
+    }
+
 });
