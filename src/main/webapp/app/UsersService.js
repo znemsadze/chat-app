@@ -165,7 +165,7 @@ chatApp.service("UsersService", function ($http, $location,CommonServices) {
             data: JSON.stringify($scope.profile)
         };
         $http(req).then(function (data) {
-            $location.path("chat");
+            $location.path("login");
         }, function (data) {
             console.log(data.status);
 

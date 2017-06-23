@@ -57,8 +57,13 @@ chatApp.controller("RegistrateController", function ($scope, UsersService, $loca
     $scope.profile = {};
     $scope.errorMessage="";
     $scope.registerProfile = function () {
-        CommonServices.startLoading($scope );
-        UsersService.saveUser($scope);
+        if($scope.profile.password!=$scope.profile.password1){
+            $scope.errorMessage="განმეორებით შეყვანილი პაროლი არ ემთხვევა პაროლს."
+        }else{
+            CommonServices.startLoading($scope );
+            UsersService.saveUser($scope);
+        }
+
     }
     $scope.loadCaptcha = function () {
 

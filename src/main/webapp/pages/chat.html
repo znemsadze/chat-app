@@ -11,7 +11,7 @@
     </form>
     <hr />
     <p ng-repeat="message in messages | orderBy:'time':true" class="message">
-        <time>{{message.time | date:'HH:mm'}} {{message.username}}</time>
+        <time>{{message.time | date:'HH:mm'}} {{message.username==null?'ანონიმური':message.username}}</time>
 
         <span ng-class="{self: message.self}"> {{message.message}}</span>
     </p>

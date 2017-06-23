@@ -15,9 +15,15 @@
                        value="" required>
             </div>
             <div class="form-group">
-                <label for="username">სახელი</label>
-                <input type="text" class="form-control" id="name" name="firstName"  ng-model="profile.firstname"
+                <label for="password">გაიმეორეთ პაროლო</label>
+                <input type="password" class="form-control" id="password" name="password1"  ng-model="profile.password1"
                        placeholder="შეიყვანეთ სახელი"
+                       value="" required>
+            </div>
+            <div class="form-group">
+                <label for="username">სახელი</label>
+                <input type="text" class="form-control" id="name" name="firstname"  ng-model="profile.firstName"
+                       placeholder="შეიყვანეთ პაროლი"
                        value="" required>
             </div>
             <div class="form-group">
@@ -30,14 +36,14 @@
                 <label for="username">დამცავი კოდი
                 </label>
                 <input type="text" class="form-control" id="name" name="captchaValue"  ng-model="profile.captchaValue"
-                       placeholder="შეიყვანეთ სახელი"
+                       placeholder="შეიყვანეთ დამცავი კოდი"
                        value="" required>
             </div>
         </form>
         <h4 style="margin: 5px;color: red"> {{errorMessage}}</h4>
         <br>
 
-        <button type="submit" ng-click="registerProfile()" class="btn btn-default "  ng-disabled="registerfrom.password.$invalid
+        <button type="submit" ng-click="registerProfile()" class="btn btn-default "  ng-disabled="registerfrom.password.$invalid||registerfrom.password1.$invalid
         || registerfrom.username.$invalid || registerfrom.firstname.$invalid || registerfrom.captchaValue.$invalid  "><i
                 ng-class="saveButtonClass"></i>რეგისტრაცია
         </button>

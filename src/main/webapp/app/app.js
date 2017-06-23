@@ -12,6 +12,10 @@ var chatApp= angular.module("chatApp", [
 // angular.module("chatApp.services", []);
 chatApp.config(function ($routeProvider) {
     $routeProvider
+        .when('/', {
+            templateUrl: 'pages/chat.html',
+            controller: 'ChatCtrl'
+        })
         .when('/chat', {
             templateUrl: 'pages/chat.html',
             controller: 'ChatCtrl'

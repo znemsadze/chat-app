@@ -54,7 +54,7 @@ chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
     var initialize = function () {
         socket.client = new SockJS(service.SOCKET_URL);
         socket.stomp = Stomp.over(socket.client);
-        // socket.stomp.debug=null;
+        socket.stomp.debug=null;
         socket.stomp.connect({}, startListener);
         socket.stomp.onclose = reconnect;
     };
@@ -63,3 +63,19 @@ chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
     return service;
 });
 
+chatApp.service("CommonServices", function ($http,$modal, $location) {
+
+    this.startLoding = function (scopeInstance) {
+        scopeInstance.modalInstance = $modal.open({
+            templateUrl: 'LoadingModal.html',
+            backdrop: 'static',
+            keyboard: false,
+            windowClass: 'center-modal'
+
+        });
+    };
+
+    this.stopLoading = function (scopeInstance) {
+        scopeInstance.modalInstance.close();
+    }
+});
