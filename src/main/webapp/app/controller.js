@@ -18,14 +18,13 @@ chatApp.controller('logoutController', function ($scope, $location, UsersService
 
 });
 
-chatApp.controller('mainController', function ($scope, $rootScope, $modal, $log, $location, UsersService) {
+chatApp.controller('mainController', function ($scope,   $modal, $log, $location, UsersService) {
     UsersService.isAuthorized($scope)
     $scope.username = "";
     $scope.password = "";
     $scope.isAdmin = false;
     $scope.isUser = false;
-    $rootScope.viewer = null;
-    $rootScope.tmpImages = [];
+
     $scope.login = function () {
         UsersService.login($scope, UsersService.isAuthorized);
     }
@@ -49,20 +48,29 @@ chatApp.controller('mainController', function ($scope, $rootScope, $modal, $log,
     }
 });
 
+chatApp.controller('LoadingController', function ($scope, $location, UsersService) {
 
-chatApp.controller("RegistrateController", function ($scope, UsersService, $location) {
+
+});
+
+chatApp.controller("RegistrateController", function ($scope, UsersService, $location,CommonServices) {
     $scope.profile = {};
-    $scope.registrateProfile = function () {
-        $scope.startLoading();
+    $scope.errorMessage="";
+    $scope.registerProfile = function () {
+        CommonServices.startLoading($scope );
         UsersService.saveUser($scope);
     }
     $scope.loadCaptcha = function () {
+
         UsersService.loadCaptchaName($scope);
 
     }
     $scope.loadCaptcha();
+
     $scope.login = function () {
         $location.path("login");
     }
+
+
 
 });

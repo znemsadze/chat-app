@@ -62,3 +62,4 @@ chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
     initialize();
     return service;
 });
+

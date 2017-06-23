@@ -1,4 +1,5 @@
-chatApp.service("UsersService", function ($http, $location) {
+chatApp.service("UsersService", function ($http, $location,CommonServices) {
+    var instance=this;
     this.isAuthorized = function ($scope) {
         $scope.user = {};
         var req = {
@@ -147,7 +148,6 @@ chatApp.service("UsersService", function ($http, $location) {
         $http(req).then(function (data) {
 
             $scope.edtUser = data.data;
-            console.log($scope.edtUser);
         }, function (data) {
 
         }).finally(function () {
@@ -165,11 +165,22 @@ chatApp.service("UsersService", function ($http, $location) {
             data: JSON.stringify($scope.profile)
         };
         $http(req).then(function (data) {
-            $scope.edtUser = data.data;
+            $location.path("chat");
         }, function (data) {
+            console.log(data.status);
+
+            if(data.status==409){
+                $scope.errorMessage="დამცავი კოდი არასწორია";
+
+            }else if(data.status==400){
+                instance.loadCaptchaName($scope)
+                $scope.errorMessage= "მომხმარებლის სახელი უკვე არსებობს";
+            }
+            instance.loadCaptchaName($scope)
+            console.log(data);
 
         }).finally(function () {
-            $scope.stopLoading();
+            CommonServices.stopLoading($scope);
         });
     }
 
@@ -185,6 +196,7 @@ chatApp.service("UsersService", function ($http, $location) {
         $http(req).then(function (data) {
             $scope.profile.captchaName = data.data.text ;
         }, function (data) {
+
             console.log(data);
         }).finally(function () {
 

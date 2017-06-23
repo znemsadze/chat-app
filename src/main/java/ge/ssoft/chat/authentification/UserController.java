@@ -6,12 +6,14 @@ import ge.ssoft.chat.core.model.Users;
 import ge.ssoft.chat.core.repositories.GenerateImagesRepo;
 import ge.ssoft.chat.core.repositories.RolesRepo;
 import ge.ssoft.chat.core.repositories.UserRepository;
+import ge.ssoft.chat.exceptions.BedRequest;
 import ge.ssoft.chat.exceptions.SendConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -189,11 +191,12 @@ public class UserController {
                 userAuthority.setRoleId(roles.getId());
                 userAuthority.setAuthority(roles.getCode());
                 user.getAuthorities().add(userAuthority);
-
             }
-
+            Users user1=userRepository.findByUsername(user.getUsername());
+            if(user1!=null   ){
+                throw new BedRequest("User already exists");
+            }
             userRepository.save(user);
-
             return user;
         }
     }

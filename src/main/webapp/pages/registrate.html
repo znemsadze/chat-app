@@ -1,50 +1,49 @@
 <div class="container login-body">
     <div class="form-signin-heading" style="text-align: center;">
         <img style="width: 200px; height: 200px;" src="images/messages.png">
-        <form name="register-from" style="text-align: left;">
+        <form name="registerfrom" style="text-align: left;">
             <div class="form-group">
                 <label for="username">მომხმარებლის სახელი</label>
-                <input type="text" class="form-control" id="username" ng-model="profile.username"
+                <input type="text" class="form-control" id="username" name="username" ng-model="profile.username"
                        placeholder="შეიყვანეთ მომხმარებლის სახელი"
-                       value="">
+                       value="" required>
             </div>
             <div class="form-group">
                 <label for="password">პაროლო</label>
-                <input type="text" class="form-control" id="password" ng-model="profile.password"
+                <input type="password" class="form-control" id="password" name="password"  ng-model="profile.password"
                        placeholder="შეიყვანეთ სახელი"
-                       value="">
+                       value="" required>
             </div>
             <div class="form-group">
                 <label for="username">სახელი</label>
-                <input type="text" class="form-control" id="name" ng-model="profile.firstname"
+                <input type="text" class="form-control" id="name" name="firstName"  ng-model="profile.firstname"
                        placeholder="შეიყვანეთ სახელი"
-                       value="">
+                       value="" required>
             </div>
-
             <div class="form-group">
                 <div class="container-fluid">
                     <div class="row">
-
                         <img class="col-sm-3" ng-src="files/captcha/{{profile.captchaName}}">
-
-
                         <div class="col-sm-3" ng-click="loadCaptcha()"><i class="fa fa-refresh"></i></div>
                     </div>
                 </div>
-                <label for="username">დამცავი კოდი</label>
-                <input type="text" class="form-control" id="name" ng-model="profile.captchaValue"
+                <label for="username">დამცავი კოდი
+                </label>
+                <input type="text" class="form-control" id="name" name="captchaValue"  ng-model="profile.captchaValue"
                        placeholder="შეიყვანეთ სახელი"
-                       value="">
-
+                       value="" required>
             </div>
-
-
         </form>
-        <button type="submit" ng-click="registerProfile()" class="btn btn-default " ng-disabled="actionDisabled"><i
+        <h4 style="margin: 5px;color: red"> {{errorMessage}}</h4>
+        <br>
+
+        <button type="submit" ng-click="registerProfile()" class="btn btn-default "  ng-disabled="registerfrom.password.$invalid
+        || registerfrom.username.$invalid || registerfrom.firstname.$invalid || registerfrom.captchaValue.$invalid  "><i
                 ng-class="saveButtonClass"></i>რეგისტრაცია
         </button>
-        <button type="submit" ng-click="login()" class="btn btn-default " ng-disabled="actionDisabled"><i
+        <button type="submit" ng-click="login()" class="btn btn-default "><i
                 ng-class="saveButtonClass"></i>შესვლა
         </button>
     </div>
 </div>
+<ng-include src="'pages/inc/LoadingModal.html'"></ng-include>

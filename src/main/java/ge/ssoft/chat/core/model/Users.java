@@ -15,7 +15,9 @@ import java.util.Set;
  */
 @Entity
 @NamedQueries({@NamedQuery(name ="Users.findByParams",query = "select t from Users t where t.lastName like ?1" +
-        " and t.firstName like ?2 and t.username like ?3 ")})
+        " and t.firstName like ?2 and t.username like ?3 "),
+        @NamedQuery(name ="Users.findByuname",query = "select t from Users t where  t.username like ?1 ")
+})
 public class Users implements UserDetails {
     @Id
     @Column(name = "user_id")
