@@ -1,5 +1,7 @@
 package ge.ssoft.chat.resources;
 
+import ge.ssoft.chat.core.model.Message;
+
 import java.util.Date;
 import static ge.ssoft.chat.utils.myutils.*;
 

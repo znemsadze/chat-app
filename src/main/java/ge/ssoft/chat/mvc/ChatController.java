@@ -2,16 +2,14 @@ package ge.ssoft.chat.mvc;
 
 import ge.ssoft.chat.authentification.TokenHandler;
 import ge.ssoft.chat.core.model.Users;
-import ge.ssoft.chat.resources.Message;
+import ge.ssoft.chat.core.model.Message;
+import ge.ssoft.chat.core.service.MessagesService;
 import ge.ssoft.chat.resources.OutputMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Date;
@@ -33,13 +31,23 @@ public class ChatController {
     }
 
 
+    MessagesService messagesService;
+
+    @Autowired
+    public void setMessagesService(MessagesService messagesService) {
+        this.messagesService = messagesService;
+    }
+
     @MessageMapping("/chat")
     @SendTo("/topic/message")
-    public OutputMessage sendMessage(Message message) {
-       Users users= tokenHandler.parseUserFromToken(message.getxAuthToken());
+    public Message sendMessage(Message message) {
+        Users users= tokenHandler.parseUserFromToken(message.getxAuthToken());
         message.setUsername(users.getFirstName());
+        message.setMessageTime(new Date());
+        message.setUserId(users.getUserId());
+        messagesService.saveMessage(message);
         System.out.println(message);
-        return new OutputMessage(message, new Date());
+        return message;
     }
 }
 

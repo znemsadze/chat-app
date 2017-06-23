@@ -2,17 +2,24 @@
 <ng-include src="'pages/header.html'"></ng-include>
 
 <div class="container">
+
+
+    <div id="div1" style="height: 500px;position:relative;">
+
+        <div id="div2" class="chat-messages">
+            <p ng-repeat="message in messages | orderBy:'time':true" class="message">
+                <time>{{message.messageTime | date:'HH:mm'}} {{message.username==null?'ანონიმური':message.username}}</time>
+                <span ng-class="{self: message.self}"> {{message.message}}</span>
+            </p>
+        </div>
+    </div>
+    <hr />
     <form ng-submit="addMessage()" name="messageForm">
-        <input type="text" placeholder="Compose a new message..." ng-model="message" />
+        <input type="text" placeholder="გაგვიზიარე შენი აზრი..." ng-model="message" />
         <div class="info">
             <span class="count" ng-bind="max - message.length" ng-class="{danger: message.length > max}">140</span>
             <button ng-disabled="message.length > max || message.length === 0">Send</button>
         </div>
     </form>
-    <hr />
-    <p ng-repeat="message in messages | orderBy:'time':true" class="message">
-        <time>{{message.time | date:'HH:mm'}} {{message.username==null?'ანონიმური':message.username}}</time>
 
-        <span ng-class="{self: message.self}"> {{message.message}}</span>
-    </p>
 </div>

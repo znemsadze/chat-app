@@ -1,4 +1,4 @@
-chatApp.controller("ChatCtrl", function ($scope, ChatService) {
+chatApp.controller("ChatCtrl", function ($scope, ChatService,MessageHistService) {
     $scope.messages = [];
     $scope.message = "";
     $scope.max = 140;
@@ -9,6 +9,13 @@ chatApp.controller("ChatCtrl", function ($scope, ChatService) {
     ChatService.receive().then(null, null, function (message) {
         $scope.messages.push(message);
     });
+
+    $scope.loadMessageHistory=function(hours){
+        $scope.hours=hours;
+        MessageHistService.getHistByHurs($scope);
+    }
+
+     $scope.loadMessageHistory(2);
 });
 
 chatApp.controller('logoutController', function ($scope, $location, UsersService) {

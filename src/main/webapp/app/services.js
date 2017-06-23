@@ -6,7 +6,7 @@ chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
     }, messageIds = [];
 
     service.RECONNECT_TIMEOUT = 30000;
-    service.SOCKET_URL = "/chat";
+    service.SOCKET_URL = "/chat-app/chat";
     service.CHAT_TOPIC = "/topic/message";
     service.CHAT_BROKER = "/app/chat";
 
@@ -36,7 +36,7 @@ chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
         var message = JSON.parse(data), out = {};
         out.message = message.message;
         out.username=message.username;
-        out.time = new Date(message.time);
+        out.messageTime = new Date(message.messageTime);
         if (_.includes(messageIds, message.id)) {
             out.self = true;
             messageIds = _.remove(messageIds, message.id);
