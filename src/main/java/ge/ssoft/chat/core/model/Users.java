@@ -12,6 +12,7 @@ import java.util.Set;
 
 /**
  * Created by zviad on 4/25/16.
+ * users model
  */
 @Entity
 @NamedQueries({@NamedQuery(name ="Users.findByParams",query = "select t from Users t where t.lastName like ?1" +
@@ -53,6 +54,20 @@ public class Users implements UserDetails {
     @Column(name = "subtitute_user_id")
     private Integer subtituteUserId;
 
+
+    @Basic
+    @Column(name = "profile_image")
+    private String profileImage;
+
+    @Basic
+    @Column(name = "birth_year")
+    private Integer birthYear;
+
+
+    @Basic
+    @Column(name = "gender_id")
+    private Integer genderId;
+
     @Transient
     private Long roleId;
 
@@ -88,7 +103,29 @@ public class Users implements UserDetails {
         this.userNameGe = userNameGe;
     }
 
+    public String getProfileImage() {
+        return profileImage;
+    }
 
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public Integer getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(Integer birthYear) {
+        this.birthYear = birthYear;
+    }
+
+    public Integer getGenderId() {
+        return genderId;
+    }
+
+    public void setGenderId(Integer genderId) {
+        this.genderId = genderId;
+    }
 
     public Long getRoleId() {
         if(roleId!=null){

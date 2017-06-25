@@ -1,9 +1,20 @@
-chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
+chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore,MessageHistService) {
 
     var service = {}, listener = $q.defer(), socket = {
         client: null,
         stomp: null
-    }, messageIds = [];
+    }, messageIds = [], users = {};
+    var chatService = this;
+    var currentUserId = -1;
+
+    this.addUser = function (user) {
+        user[user.id] = user;
+    }
+
+    service.setCurrentUserId = function (userId) {
+        currentUserId = userId;
+    }
+
 
     service.RECONNECT_TIMEOUT = 30000;
     service.SOCKET_URL = "/chat-app/chat";
@@ -17,12 +28,12 @@ chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
     service.send = function (message) {
         var id = Math.floor(Math.random() * 1000000);
         socket.stomp.send(service.CHAT_BROKER, {
-                priority: 9
-            }, JSON.stringify({
-                message: message,
-                id: id,
-                xAuthToken:$cookies.get('X-AUTH-TOKEN')
-            }) );
+            priority: 9
+        }, JSON.stringify({
+            message: message,
+            id: id,
+            xAuthToken: $cookies.get('X-AUTH-TOKEN')
+        }));
         messageIds.push(id);
     };
 
@@ -35,26 +46,25 @@ chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
     var getMessage = function (data) {
         var message = JSON.parse(data), out = {};
         out.message = message.message;
-        out.username=message.username;
+        out.username = message.username;
         out.messageTime = new Date(message.messageTime);
-        if (_.includes(messageIds, message.id)) {
+        //if (_.includes(messageIds, message.id)) {
+        if (message.userId == currentUserId) {
             out.self = true;
-            messageIds = _.remove(messageIds, message.id);
         }
-
         return out;
     };
 
     var startListener = function () {
         socket.stomp.subscribe(service.CHAT_TOPIC, function (data) {
-            listener.notify(getMessage(data.body));
+            listener.notify(MessageHistService.parseMessage(data.body));
         });
     };
 
     var initialize = function () {
         socket.client = new SockJS(service.SOCKET_URL);
         socket.stomp = Stomp.over(socket.client);
-        socket.stomp.debug=null;
+        socket.stomp.debug = null;
         socket.stomp.connect({}, startListener);
         socket.stomp.onclose = reconnect;
     };
@@ -63,19 +73,3 @@ chatApp.service("ChatService", function ($q, $timeout, $cookies, $cookieStore) {
     return service;
 });
 
-chatApp.service("CommonServices", function ($http,$modal, $location) {
-
-    this.startLoding = function (scopeInstance) {
-        scopeInstance.modalInstance = $modal.open({
-            templateUrl: 'LoadingModal.html',
-            backdrop: 'static',
-            keyboard: false,
-            windowClass: 'center-modal'
-
-        });
-    };
-
-    this.stopLoading = function (scopeInstance) {
-        scopeInstance.modalInstance.close();
-    }
-});

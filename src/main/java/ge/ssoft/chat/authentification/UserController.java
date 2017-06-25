@@ -41,7 +41,6 @@ public class UserController {
     @RequestMapping(value = "api/users/current", method = RequestMethod.GET)
     public Users getCurrent() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if (authentication instanceof UserAuthentication) {
             return ((UserAuthentication) authentication).getDetails();
         }
@@ -56,7 +55,6 @@ public class UserController {
         if (cookies == null) {
             return new Users(authentication.getName());
         }
-
         Cookie coo = null;
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(TokenAuthenticationService.AUTH_HEADER_NAME)) {
@@ -94,16 +92,13 @@ public class UserController {
     public ResponseEntity<String> changePassword(@RequestBody final Users user) {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         final Users currentUser = userRepository.findByUsername(authentication.getName());
-
         if (user.getNewPassword() == null || user.getNewPassword().length() < 4) {
             return new ResponseEntity<String>("new password to short", HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
         final BCryptPasswordEncoder pwEncoder = new BCryptPasswordEncoder();
         if (!pwEncoder.matches(user.getPassword(), currentUser.getPassword())) {
             return new ResponseEntity<String>("old password mismatch", HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
         currentUser.setPassword(pwEncoder.encode(user.getNewPassword()));
         userRepository.saveAndFlush(currentUser);
         return new ResponseEntity<String>("password changed", HttpStatus.OK);
@@ -114,7 +109,6 @@ public class UserController {
         if (user == null) {
             return new ResponseEntity<String>("invalid user id", HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
         user.grantRole(role);
         userRepository.saveAndFlush(user);
         return new ResponseEntity<String>("role granted", HttpStatus.OK);
@@ -141,16 +135,6 @@ public class UserController {
 
     @RequestMapping(value = "admin/api/users/byid", method = RequestMethod.POST)
     public Users saveUser(@RequestBody Users user) {
-        if(user.getCaptchaName()==null||user.getCaptchaValue()==null){
-            throw new SendConflictException("invalid captcha");
-        }else{
-            GenerateImages  generateImages=generateImagesRepo.findOne(user.getCaptchaName());
-            if(generateImages==null|| !user.getCaptchaValue().equals( generateImages.getImageText())){
-                throw new  SendConflictException("invalid captcha");
-            }else{
-                generateImagesRepo.delete(generateImages);
-            }
-        }
         if (user.getUserId() != null) {
             Users currentUser = userRepository.findOne(user.getUserId());
             currentUser.setFirstName(user.getFirstName());
@@ -158,6 +142,9 @@ public class UserController {
             currentUser.setOccupation(user.getOccupation());
             currentUser.setSubtituteUserId(user.getSubtituteUserId());
             currentUser.getAuthorities().removeAll(currentUser.getAuthorities());
+            currentUser.setProfileImage(user.getProfileImage());
+            currentUser.setBirthYear(user.getBirthYear());
+            currentUser.setGenderId(user.getGenderId());
             if (user.getRoleId() != null) {
                 Roles roles = rolesRepo.findOne(user.getRoleId().intValue());
                 UserAuthority userAuthority = new UserAuthority();
@@ -176,7 +163,16 @@ public class UserController {
 
             return currentUser;
         } else {
-
+            if(user.getCaptchaName()==null||user.getCaptchaValue()==null){
+                throw new SendConflictException("invalid captcha");
+            }else{
+                GenerateImages  generateImages=generateImagesRepo.findOne(user.getCaptchaName());
+                if(generateImages==null|| !user.getCaptchaValue().equals( generateImages.getImageText())){
+                    throw new  SendConflictException("invalid captcha");
+                }else{
+                    generateImagesRepo.delete(generateImages);
+                }
+            }
             if (user.getPassword() == null) {
                 user.setPassword(new BCryptPasswordEncoder().encode("123456"));
             } else {

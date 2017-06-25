@@ -32,6 +32,14 @@ chatApp.config(function ($routeProvider) {
             templateUrl: 'pages/registrate.html',
             controller: 'RegistrateController'
         })
+        .when('/profile', {
+            templateUrl: 'pages/profile.html',
+            controller: 'ProfileController'
+        })
+        .when('/edit-profile', {
+            templateUrl: 'pages/edit-profile.html',
+            controller: 'ProfileController'
+        })
         .otherwise({
             templateUrl: 'pages/login.html',
             controller: 'mainController'

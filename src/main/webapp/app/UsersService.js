@@ -1,124 +1,77 @@
-chatApp.service("UsersService", function ($http, $location,CommonServices) {
-    var instance=this;
+chatApp.service("UsersService", function ($http, $location, CommonServices, RemoteService) {
+    var instance = this;
     this.isAuthorized = function ($scope) {
         $scope.user = {};
-        var req = {
-            method: 'GET',
-            url: 'rest/api/users/current',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        };
-        $http(req).then(function (data) {
+        RemoteService.requestGet("rest/api/users/current", null, function (data) {
             $scope.user = data.data;
+            console.log("asdasd");
             if ($scope.user == null || $scope.user.username == "anonymousUser") {
                 $location.path("login");
             } else {
                 $location.path("chat");
             }
-
         }, function (data) {
             $location.path("login");
 
-        }).finally(function () {
         });
     }
 
 
-    this.getUser = function ($scope) {
-        var req = {
-            method: 'GET',
-            url: 'rest/api/users/current',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        };
-        $http(req).then(function (data) {
+    this.getUser = function ($scope, loadFn) {
+        RemoteService.requestGet('rest/api/users/current', null, function (data) {
             $scope.user = data.data;
+            loadFn(data.data);
             if ($scope.user == null || $scope.user.username == "anonymousUser") {
                 $location.path("login");
             } else {
-
-                if ($scope.user.roleId ==1) {
+                if ($scope.user.roleId == 1) {
                     $scope.isAdmin = true;
                     $scope.isUser = false;
-                } else if($scope.user.roleId ==2) {
+                } else if ($scope.user.roleId == 2) {
                     $scope.isUser = true;
                     $scope.isAdmin = false;
-                }else{
+                } else {
                     $scope.isUser = false;
                     $scope.isAdmin = false;
                 }
-
             }
-
         }, function (data) {
             $location.path("login");
-
-        }).finally(function () {
-
         });
     }
 
 
     this.login = function ($scope, loadUser) {
         $scope.user = {};
-
-        var req = {
-            method: 'POST',
-            url: 'api/login',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            params: {username: $scope.username, password: $scope.password}
-        };
-
-        $http(req).then(function (data) {
-            $scope.user = data.data;
-            if ($scope.user != null && $scope.user.username != "anonymousUser") {
-                loadUser($scope);
-            } else {
+        RemoteService.requestPost("api/login", {username: $scope.username, password: $scope.password},
+            function (data) {
+                $scope.user = data.data;
+                if ($scope.user != null && $scope.user.username != "anonymousUser") {
+                    loadUser($scope);
+                } else {
+                    $scope.errorMessage = "არასწორი მომხმარებლის სახელი ან პაროლი";
+                }
+            }, function (data) {
                 $scope.errorMessage = "არასწორი მომხმარებლის სახელი ან პაროლი";
-            }
-        }, function (data) {
-            $scope.errorMessage = "არასწორი მომხმარებლის სახელი ან პაროლი";
-        }).finally(function () {
-        });
+            })
     }
 
     this.logout = function ($scope) {
-        var req = {
-            method: 'POST',
-            url: 'rest/api/logout',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-        $http(req).then(function (data) {
+        RemoteService.requestPost("rest/api/logout", null, function (data) {
             $scope.user = data.data;
-
             if ($scope.user != null && $scope.user.username != "anonymousUser") {
                 $location.path("home");
             } else {
                 $location.path("login");
             }
         }, function (data) {
-        }).finally(function () {
         });
     }
 
     this.getAllRoles = function ($scope) {
-        var req = {
-            method: 'GET',
-            url: 'rest/dictionary/users/role',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-        $http(req).then(function (data) {
+        RemoteService.requestGet('rest/dictionary/users/role', null, function (data) {
             $scope.roles = data.data;
         }, function (data) {
-        }).finally(function () {
         });
     }
 
@@ -137,69 +90,48 @@ chatApp.service("UsersService", function ($http, $location,CommonServices) {
         });
     }
 
-    this.getUserById=function(userId,$scope){
-        var req={
-            method: 'GET',
-            url: 'rest/admin/api/users/byid/'+userId,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-        $http(req).then(function (data) {
-
-            $scope.edtUser = data.data;
-        }, function (data) {
-
-        }).finally(function () {
-
-        });
-
-    }
-    this.saveUser=function($scope){
-        var req={
-            method: 'POST',
-            url: 'rest/admin/api/users/byid',
-            headers: {
-                'Content-Type': 'application/json'
+    this.getUserById = function (userId, $scope) {
+        RemoteService.requestGet('rest/admin/api/users/byid/' + userId, null,
+            function (data) {
+                $scope.edtUser = data.data;
             },
-            data: JSON.stringify($scope.profile)
-        };
-        $http(req).then(function (data) {
+            function (data) {
+            })
+    }
+
+    this.saveUser = function ($scope) {
+        RemoteService.postObj('rest/admin/api/users/byid', $scope.profile, function (data) {
             $location.path("login");
         }, function (data) {
-            console.log(data.status);
-
-            if(data.status==409){
-                $scope.errorMessage="დამცავი კოდი არასწორია";
-
-            }else if(data.status==400){
+            if (data.status == 409) {
+                $scope.errorMessage = "დამცავი კოდი არასწორია";
+            } else if (data.status == 400) {
                 instance.loadCaptchaName($scope)
-                $scope.errorMessage= "მომხმარებლის სახელი უკვე არსებობს";
+                $scope.errorMessage = "მომხმარებლის სახელი უკვე არსებობს";
             }
             instance.loadCaptchaName($scope)
             console.log(data);
-
-        }).finally(function () {
+        }, function () {
             CommonServices.stopLoading($scope);
-        });
+        })
     }
 
-    this.loadCaptchaName=function($scope){
-        console.log("dsdfsdfsdfdfsf")
-        var req={
-            method: 'GET',
-            url: 'files/filename',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-        $http(req).then(function (data) {
-            $scope.profile.captchaName = data.data.text ;
+
+    this.saveProfile = function (profile, succescb, errorcb) {
+            RemoteService.postObj("rest/admin/api/users/byid",profile,succescb,errorcb);
+    }
+
+
+    this.getProfileById=function ( profileId,succescb,errorcb) {
+        RemoteService.requestGet("rest/admin/api/users/byid/"+profileId,null,succescb,errorcb);
+    }
+
+
+    this.loadCaptchaName = function ($scope) {
+        RemoteService.requestGet("files/filename",null,function (data) {
+            $scope.profile.captchaName = data.data.text;
         }, function (data) {
-
             console.log(data);
-        }).finally(function () {
-
         });
     }
 

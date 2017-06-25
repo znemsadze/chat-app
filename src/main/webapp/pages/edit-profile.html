@@ -1,0 +1,35 @@
+
+<ng-include src="'pages/header.html'"></ng-include>
+<div class="profilebase">
+    <div  class="profileimg" >
+        <img ng-src="upload-file/get-file/smol_{{profile.profileImage}}">
+        <input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"
+               ng-disabled="actionDisabled"/>
+    </div>
+
+    <div class="profiletext">
+        <form name="profile" >
+            <div class="profiletextItem">
+                <time>მომხმარებლის სახელი</time><p>{{profile.username}}</p>
+            </div>
+            <div class="profiletextItem">
+                <time>სახელი</time><input type="text" ng-model="profile.firstName"/>
+            </div>
+            <div class="profiletextItem">
+                <time>დაბადების წელი</time><input type="number" ng-model="profile.birthYear"/>
+            </div>
+            <div class="profiletextItem">
+                <time>გვარი</time><input type="text" ng-model="profile.lastName"/>
+            </div>
+            <div class="profiletextItem">
+                <time>სქესი</time>
+                <select   ng-model="profile.genderId" ng-options=" item.id as item.name for item in genders" />
+
+
+            </div>
+        </form>
+        <button ng-click="saveProfile()">შენახვა</button>
+    </div>
+</div>
+
+<ng-include src="'pages/inc/LoadingModal.html'"></ng-include>

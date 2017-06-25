@@ -1,0 +1,36 @@
+<ng-include src="'pages/header.html'"></ng-include>
+
+<div class="profilebase">
+    <div class="profileimg">
+        <img ng-src="upload-file/get-file/{{profile.profileImage}}">
+    </div>
+    <div class="profiletext">
+        <form name="profile">
+            <div class="profiletextItem">
+                <time>მომხმარებლის სახელი</time>
+                <p>{{profile.username}}</p>
+            </div>
+            <div class="profiletextItem">
+                <time>სახელი</time>
+                <p>{{profile.firstName}}</p>
+            </div>
+            <div class="profiletextItem">
+                <time>დაბადების წელი</time>
+                <p>{{profile.birthYear}}</p>
+            </div>
+            <div class="profiletextItem">
+                <time>გვარი</time>
+                <p>{{profile.lastName}}</p>
+            </div>
+            <div class="profiletextItem">
+
+                <time>სქესი</time>
+                <select disabled="true"    ng-model="profile.genderId" ng-options=" item.id as item.name for item in genders" />
+            </div>
+
+        </form>
+        <button ng-click="editProfile()">რედაქტირება</button>
+    </div>
+</div>
+
+<ng-include src="'pages/inc/LoadingModal.html'"></ng-include>
