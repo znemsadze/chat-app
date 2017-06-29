@@ -18,6 +18,7 @@ import static ge.ssoft.chat.init.ApplicationConfig.getConfig;
 
 /**
  * Created by zviad on 6/14/17.
+ * simple socket brodcasct controller
  */
 @Controller
 public class ChatController {
@@ -25,8 +26,8 @@ public class ChatController {
     TokenHandler tokenHandler;
 
     @Autowired
-    public  ChatController (@Value("secret") String secret){
-          secret= getConfig("token.secret");
+    public ChatController(@Value("secret") String secret) {
+        secret = getConfig("token.secret");
         tokenHandler = new TokenHandler(DatatypeConverter.parseBase64Binary(secret));
     }
 
@@ -41,7 +42,7 @@ public class ChatController {
     @MessageMapping("/chat")
     @SendTo("/topic/message")
     public Message sendMessage(Message message) {
-        Users users= tokenHandler.parseUserFromToken(message.getxAuthToken());
+        Users users = tokenHandler.parseUserFromToken(message.getxAuthToken());
         message.setUsername(users.getFirstName());
         message.setMessageTime(new Date());
         message.setUserId(users.getUserId());
